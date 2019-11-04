@@ -1,0 +1,61 @@
+#!/bin/bash
+touch logfile.txt
+echo "Script has started at $(date)" >> logfile.txt
+cd /var/www/html
+sudo rm index.html
+sudo touch index.html
+sudo chmod 777 index.html
+echo "Public IP adress: " >> index.html && curl ipinfo.io/ip >> index.html
+printf "\n" >> index.html
+echo "Private IP adress: " >> index.html && ip addr show eth0 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1 >> index.html
+cd
+sudo sed -i 's/80/8081/' /etc/apache2/ports.conf
+sudo sed -i 's/80/8081/' /etc/apache2/sites-enabled/000-default.conf
+sudo systemctl start apache2
+
+sudo su
+sudo echo "*/5 * * * *  root  /var/www/html " >> /etc/crontab
+exit
+
+sudo adduser --disabled-password --gecos "" wwwuser1
+sudo adduser --disabled-password --gecos "" ivona
+sudo su - ivona
+mkdir .ssh
+chmod 700 .ssh
+touch .ssh/authorized_keys
+chmod 600 .ssh/authorized_keys
+cat > .ssh/authorized_keys <<EnD
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDKnHDmqWZMj+OusM1L1cQIded5KgSPrRIBfokGukXB96vVgt2h1QeAoFSu9jQGNGYjh8xe2xVMmqLJn3JyTSmYoCoc/DDoGhtYRXWE8CDCoBWjaCpSRDGteN0xlzb/XZMXw9T+oSrc2ftM/rWcd2SWX4Ht9vqYPfi5/oLTgRXKUGZRCO/tNqzHTh9q0t1nZaDNr7INkq9xDuEUPsTfCwHKwwAL5/qhwPwK1o/DdzHZ625Yxi+3EhKAg/7awDjfru+7zX/N4dFSM9P+FpDluguNxy3eMhfCWrMcj/5J/LkLhjff2OoPVG2k8oAK1iAA3ys+CkW3cXGjW7P0TJLzRuC9 ivona@DESKTOP-IADFLR0
+EnD
+exit
+
+sudo adduser --disabled-password --gecos "" robert
+sudo su - robert
+mkdir .ssh
+chmod 700 .ssh
+touch .ssh/authorized_keys
+chmod 600 .ssh/authorized_keys
+cat > .ssh/authorized_keys <<EnD
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCqUBzPadUqcg/I7xEr4s/v/M2kKaM6EUoH8HVfVGp0g/CmeEC1b0x/mvViSaHjlQQh1LjhBzs9ryjXmCsg5yqHAQvk2tGhSzvYSp1eeX0oz0SKj4CI5BsJuGXpLKBcgS8DfaKCmnm0JIIhObGZ8U1cZC/jbfUKipYQ1rOXEVZKrGYPta09fbHyo8EUIzZfWliO8T6O5/2bitO9OGwat7SXMojwkPalbBRJpDbwzXilimRRDsMy4OafO+kGQgi9p7SgVGbIujX5uOzkVlCXEceWhDGwxCsDqj2NOaz48rq1j1SCWBaEQn0EnDRXptpctqwU2g+NHX70Hoor/ZU62KgF ivona@DESKTOP-IADFLR0
+EnD
+exit
+
+sudo adduser --disabled-password --gecos "" sinisa
+sudo su - sinisa
+mkdir .ssh
+chmod 700 .ssh
+touch .ssh/authorized_keys
+chmod 600 .ssh/authorized_keys
+cat > .ssh/authorized_keys <<EnD
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCyL7LuKSzOmI2JemEFVYPH6lr2Dn5YokDqIrlkXYayh2/SQJKY6p/D6Wqesi5F9JAjWg9KZxZLA5VXX2vhRf7mPpARIscXpXS6R9NewdxNGZfQ1XgI2Jr8vO96AHu6ifc0FdqzFCT9OzpCxDskpQypr0B8GriCxzNLhAPgn+hGnn0qqVu2O8SYZ+uWtYLRu31utsTABZTMO6TcQOTi8pdYHXizgMJ3qqX3pofk5qqZogCELNzHyk3UaTZurIJWgHdY6H71jmsKXKzk8wLe2+Kw8n47GHZhlz8TnnpfQCAxeL7T9ZOzaLx4oXO6Q20LcnEsu6Cj/bSrO2cTT4EuxGs3 ivona@DESKTOP-IADFLR0
+EnD
+exit
+
+sudo su
+sudo echo 'ivona  ALL=(ALL:ALL) ALL' >> /etc/sudoers
+sudo echo 'robert  ALL=(ALL:ALL) ALL' >> /etc/sudoers
+sudo echo 'sinisa  ALL=(ALL:ALL) ALL' >> /etc/sudoers
+exit
+
+cat /var/log/cloud-init-output.log >> logfile.txt
+echo "Script has ended at $(date)" >> logfile.txt
